@@ -4,6 +4,7 @@ import com.ultimate.testing.entity.MathGrade;
 import com.ultimate.testing.entity.Student;
 import com.ultimate.testing.repo.MathGradesRepo;
 import com.ultimate.testing.repo.StudentRepo;
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
@@ -12,6 +13,7 @@ import java.util.List;
 import java.util.Optional;
 
 @Service
+@Transactional
 public class StudentAndGradeService {
 
     @Autowired
@@ -29,8 +31,10 @@ public class StudentAndGradeService {
     }
 
     public void deleteStudent (int id){
-        if (checkIfStudentIsNull(id))
+        if (checkIfStudentIsNull(id)){
             studentRepo.deleteById(id);
+            mathGradesRepo.deleteByStudentId(id);
+        }
     }
 
     public boolean checkIfStudentIsNull(int id){
@@ -57,5 +61,14 @@ public class StudentAndGradeService {
             return true;
         }
         return false;
+    }
+
+    public int deleteMathGrade(int id) {
+        int studentId = 0;
+        Optional<MathGrade> optionalMathGrade = mathGradesRepo.findById(id);
+        if (!optionalMathGrade.isPresent())
+            return studentId;
+        studentId = optionalMathGrade.get().getStudentId();
+        return studentId;
     }
 }

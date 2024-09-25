@@ -1,9 +1,11 @@
 package com.ultimate.testing.service;
 
-import com.ultimate.testing.repo.Student;
+import com.ultimate.testing.entity.MathGrade;
+import com.ultimate.testing.entity.Student;
+import com.ultimate.testing.repo.MathGradesRepo;
 import com.ultimate.testing.repo.StudentRepo;
-import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -12,9 +14,14 @@ import java.util.Optional;
 @Service
 public class StudentAndGradeService {
 
-
     @Autowired
     private StudentRepo studentRepo;
+    @Autowired
+    private MathGradesRepo mathGradesRepo;
+    @Autowired
+    @Qualifier("mathGrades")
+    private MathGrade mathGrade;
+
 
     public void createStudent(String firstname, String lastname,  String email){
         Student student = new Student(firstname , lastname,email);
@@ -37,5 +44,18 @@ public class StudentAndGradeService {
         List<Student> students = studentRepo.findAll();
 
         return students;
+    }
+
+    public boolean createGrade(double grade , int studentId , String gradeType){
+        if (!checkIfStudentIsNull(studentId))
+            return false;
+        if (grade>=0 && grade<=100){
+            mathGrade.setGrade(grade);
+            mathGrade.setStudentId(studentId);
+            mathGrade.setId(0);
+            mathGradesRepo.save(mathGrade);
+            return true;
+        }
+        return false;
     }
 }

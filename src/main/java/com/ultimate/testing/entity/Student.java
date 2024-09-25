@@ -1,8 +1,6 @@
-package com.ultimate.testing.repo;
+package com.ultimate.testing.entity;
 
 import jakarta.persistence.*;
-import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 //@Data
 //@RequiredArgsConstructor

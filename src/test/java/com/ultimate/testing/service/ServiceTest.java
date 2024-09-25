@@ -1,23 +1,25 @@
 package com.ultimate.testing.service;
 
-import com.ultimate.testing.repo.Student;
+import com.ultimate.testing.entity.MathGrade;
+import com.ultimate.testing.entity.Student;
+import com.ultimate.testing.repo.MathGradesRepo;
 import com.ultimate.testing.repo.StudentRepo;
 
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.context.jdbc.Sql;
 
 import java.util.List;
-import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-@TestPropertySource("/application.properties")
+@TestPropertySource("/application-test.properties")
 @SpringBootTest
 public class ServiceTest {
 
@@ -28,14 +30,30 @@ public class ServiceTest {
     private StudentAndGradeService studentService;
     @Autowired
     private StudentRepo studentRepo;
+    @Autowired
+    private MathGradesRepo mathGradesRepo;
+
+
+    @Value("${sql.script.create.student}")
+    private String sqlAddStudent;
+    @Value("${sql.script.create.math.grade}")
+    private String sqlAddMathGrade;
+    @Value("${sql.script.delete.student}")
+    private String sqlDeleteStudent;
+    @Value("${sql.script.delete.math.grade}")
+    private String sqlDeleteMathGrade;
 
     @BeforeEach
     public void setUpDatabase(){
-        jdbcTemplate.execute("insert into student(id,  firstname , lastname, email_address) values(1,'Ahmed' , 'Rayf' , 'ahmedrayf@hotmail.com') ");
+        jdbcTemplate.execute(sqlAddStudent);
+        jdbcTemplate.execute(sqlAddMathGrade);
+
     }
     @AfterEach
     public void cleanUpDatabase(){
-        jdbcTemplate.execute("Delete from student");
+        jdbcTemplate.execute(sqlDeleteStudent);
+        jdbcTemplate.execute(sqlDeleteMathGrade);
+
     }
 
     @Test
@@ -61,6 +79,23 @@ public class ServiceTest {
         assertTrue(studentRepo.findById(1).isPresent() , "Student is not exist ");
         studentService.deleteStudent(1);
         assertFalse(studentRepo.findById(1).isPresent());
+
+    }
+
+    @Test
+    public void createGradeTest(){
+        assertTrue(studentService.createGrade(90.0,1,"math"));
+
+        List<MathGrade> mathGrades = mathGradesRepo.findGradeByStudentId(1);
+
+        assertEquals(2 , mathGrades.size());
+    }
+
+    @Test
+    public void failCreateGradeTest(){
+        assertFalse(studentService.createGrade(115.0,1,"math"), "Value more than 100");
+        assertFalse(studentService.createGrade(-5.0,1,"math"),"Negative value");
+
 
     }
 

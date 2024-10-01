@@ -32,7 +32,8 @@ public class ServiceTest {
     private StudentRepo studentRepo;
     @Autowired
     private MathGradesRepo mathGradesRepo;
-
+    @Value("${student.id}")
+    private  int studentId;
 
     @Value("${sql.script.create.student}")
     private String sqlAddStudent;
@@ -59,7 +60,7 @@ public class ServiceTest {
 
     @Test
     public void checkStudentExistTest() {
-        assertTrue(studentService.checkIfStudentIsNull(1));
+        assertTrue(studentService.checkIfStudentIsNull(studentId));
         assertFalse(studentService.checkIfStudentIsNull(0));
     }
 
@@ -78,31 +79,31 @@ public class ServiceTest {
 
     @Test
     public void deleteStudentTest() {
-        assertTrue(studentRepo.findById(1).isPresent(), "Student is not exist ");
-        studentService.deleteStudent(1);
-        assertFalse(studentRepo.findById(1).isPresent());
-        assertTrue(mathGradesRepo.findGradeByStudentId(1).isEmpty());
+        assertTrue(studentRepo.findById(studentId).isPresent(), "Student is not exist ");
+        studentService.deleteStudent(studentId);
+        assertFalse(studentRepo.findById(studentId).isPresent());
+        assertTrue(mathGradesRepo.findGradeByStudentId(studentId).isEmpty());
 
     }
 
     @Test
     public void createGradeTest() {
-        assertTrue(studentService.createGrade(90.0, 1, "math"));
+        assertTrue(studentService.createGrade(90.0, studentId, "math"));
 
-        List<MathGrade> mathGrades = mathGradesRepo.findGradeByStudentId(1);
+        List<MathGrade> mathGrades = mathGradesRepo.findGradeByStudentId(studentId);
 
         assertEquals(2, mathGrades.size());
     }
 
     @Test
     public void failCreateGradeTest() {
-        assertFalse(studentService.createGrade(115.0, 1, "math"), "Value more than 100");
-        assertFalse(studentService.createGrade(-5.0, 1, "math"), "Negative value");
+        assertFalse(studentService.createGrade(115.0, studentId, "math"), "Value more than 100");
+        assertFalse(studentService.createGrade(-5.0, studentId, "math"), "Negative value");
     }
 
     @Test
     public void deleteMathGradeTest() {
-        assertEquals(1, studentService.deleteMathGrade(100) , "returns deleted grade's studentId" );
+        assertEquals(100, studentService.deleteMathGrade(100) , "returns deleted grade's studentId" );
     }
 
 }

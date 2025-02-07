@@ -25,9 +25,8 @@ public class StudentAndGradeService {
     private MathGrade mathGrade;
 
 
-    public void createStudent(String firstname, String lastname,  String email){
-        Student student = new Student(firstname , lastname,email);
-        studentRepo.save(student);
+    public Student createStudent(Student student) {
+        return studentRepo.save(student);
     }
 
     public void deleteStudent (int id){
@@ -66,7 +65,7 @@ public class StudentAndGradeService {
     public int deleteMathGrade(int id) {
         int studentId = 0;
         Optional<MathGrade> optionalMathGrade = mathGradesRepo.findById(id);
-        if (!optionalMathGrade.isPresent())
+        if (optionalMathGrade.isEmpty())
             return studentId;
         studentId = optionalMathGrade.get().getStudentId();
         return studentId;

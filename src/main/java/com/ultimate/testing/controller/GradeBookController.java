@@ -21,7 +21,7 @@ public class GradeBookController {
 
     @PostMapping
     public void createStudent(@RequestBody Student student) {
-        service.createStudent(student.getFirstname(), student.getLastname(), student.getEmailAddress());
+        service.createStudent(student);
     }
 
 }

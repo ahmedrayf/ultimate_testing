@@ -1,10 +1,16 @@
 package com.ultimate.testing.entity;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
-//@Data
-//@RequiredArgsConstructor
+@Data
+@RequiredArgsConstructor
 @Entity
+@Builder
+@AllArgsConstructor
 public class Student {
     @Id
     @GeneratedValue(strategy= GenerationType.IDENTITY)
@@ -16,52 +22,6 @@ public class Student {
     @Column(name="email_address")
     private String emailAddress;
 
-    public Student() {
-
-    }
-
-    public Student(String firstname, String lastname, String emailAddress) {
-        this.firstname = firstname;
-        this.lastname = lastname;
-        this.emailAddress = emailAddress;
-    }
-
-    public int getId() {
-        return id;
-    }
-
-    public void setId(int id) {
-        this.id = id;
-    }
-
-    public String getFirstname() {
-        return firstname;
-    }
-
-    public void setFirstname(String firstname) {
-        this.firstname = firstname;
-    }
-
-    public String getLastname() {
-        return lastname;
-    }
-
-    public void setLastname(String lastname) {
-        this.lastname = lastname;
-    }
-
-    public String getEmailAddress() {
-        return emailAddress;
-    }
-
-    public void setEmailAddress(String emailAddress) {
-        this.emailAddress = emailAddress;
-    }
-
-
-    public String getFullName() {
-        return getFirstname() + " " + getLastname();
-    }
 
     @Override
     public String toString() {
@@ -73,7 +33,5 @@ public class Student {
                 '}';
     }
 
-    public String studentInformation() {
-        return getFullName() + " " + getEmailAddress();
-    }
+
 }

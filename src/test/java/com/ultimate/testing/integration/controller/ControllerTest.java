@@ -1,4 +1,4 @@
-package com.ultimate.testing.controller;
+package com.ultimate.testing.integration.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ultimate.testing.entity.Student;

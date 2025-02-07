@@ -1,10 +1,11 @@
-package com.ultimate.testing.service;
+package com.ultimate.testing.integration.service;
 
 import com.ultimate.testing.entity.MathGrade;
 import com.ultimate.testing.entity.Student;
 import com.ultimate.testing.repo.MathGradesRepo;
 import com.ultimate.testing.repo.StudentRepo;
 
+import com.ultimate.testing.service.StudentAndGradeService;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -59,6 +60,19 @@ public class ServiceTest {
     }
 
     @Test
+    void createStudentSuccessTest() {
+        Student student = Student.builder()
+                .firstname("firstname")
+                .lastname("lastname")
+                .emailAddress("emailaddress@gmail.com")
+                .build();
+
+        Student dbStudent = studentService.createStudent(student);
+        assertEquals("firstname" , dbStudent.getFirstname());
+    }
+
+
+    @Test
     public void checkStudentExistTest() {
         assertTrue(studentService.checkIfStudentIsNull(studentId));
         assertFalse(studentService.checkIfStudentIsNull(0));
@@ -105,5 +119,6 @@ public class ServiceTest {
     public void deleteMathGradeTest() {
         assertEquals(100, studentService.deleteMathGrade(100) , "returns deleted grade's studentId" );
     }
+
 
 }

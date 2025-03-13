@@ -1,4 +1,4 @@
-package com.ultimate.testing.unit.service.repo;
+package com.ultimate.testing.unit.repo;
 
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 

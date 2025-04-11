@@ -43,7 +43,7 @@ public class StudentAndGradeService {
         return false;
     }
 
-    public List<Student> findAllStudents() {
+    public List<Student> findAllStudents() throws RuntimeException {
         List<Student> students = studentRepo.findAll();
 
         return students;
